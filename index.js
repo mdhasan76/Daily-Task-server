@@ -42,31 +42,19 @@ const run = async() =>{
     //delete task
     app.delete("/delete/:id", async(req, res) =>{
         const id = req.params.id;
-        const query = {id: ObjectId(id)};
+        const query = {_id: ObjectId(id)};
+        console.log(query)
         const result = await taskCollection.deleteOne(query);
         res.send(result)
     });
 
     app.patch("/complatetask/:id", async(req, res) =>{
         const id = req.params.id;
-        const filter = {id: ObjectId(id)};
+        const filter = {_id: ObjectId(id)};
         const option = {upsert: true};
         const updateDoc = {
             $set:{
-                isComplate: true
-            }
-        }
-        const result = await taskCollection.updateOne(filter, updateDoc, option);
-        res.send(result)
-    })
-
-
-    app.patch("/canceltask/:id", async(req, res) =>{
-        const id = req.params.id;
-        const filter = {id: ObjectId(id)};
-        const updateDoc = {
-            $set:{
-                isComplate: false
+                isComplate: req.body.isComplate
             }
         }
         const result = await taskCollection.updateOne(filter, updateDoc, option);
