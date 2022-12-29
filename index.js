@@ -28,8 +28,15 @@ const run = async() =>{
 
     app.get("/mytask", async(req, res) =>{
         const email = req.query.email
-        const query = {email:email};
+        const query = {email:email, isComplate: false};
         const result = await taskCollection.find(query).toArray();
+        res.send(result)
+    })
+
+    app.get("/mycomplatetask", async(req, res) =>{
+        const email = req.query.email;
+        const filter = {email: email,  isComplate: true};
+        const result = await taskCollection.find(filter).toArray();
         res.send(result)
     })
 
@@ -50,14 +57,14 @@ const run = async() =>{
 
     app.patch("/complatetask/:id", async(req, res) =>{
         const id = req.params.id;
+        const value = req.body.isComplate;
         const filter = {_id: ObjectId(id)};
-        const option = {upsert: true};
         const updateDoc = {
             $set:{
-                isComplate: req.body.isComplate
+                isComplate: value
             }
         }
-        const result = await taskCollection.updateOne(filter, updateDoc, option);
+        const result = await taskCollection.updateOne(filter, updateDoc);
         res.send(result)
     })
 
