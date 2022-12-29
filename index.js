@@ -39,6 +39,7 @@ const run = async() =>{
         res.send(result);
     });
 
+    //delete task
     app.delete("/delete/:id", async(req, res) =>{
         const id = req.params.id;
         const query = {id: ObjectId(id)};
