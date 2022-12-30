@@ -82,7 +82,7 @@ const run = async() =>{
     //update Task
     app.patch("/updatetask/:id", async(req, res) =>{
         const id = req.params.id;
-        const data = req.body.data;
+        const data = req.body.updateData;
         const filter = {_id: ObjectId(id)};
         const updateDoc = {
             $set:{
