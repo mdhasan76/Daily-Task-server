@@ -40,11 +40,21 @@ const run = async() =>{
         res.send(result)
     })
 
+    //single task
+    app.get("/updatetask/:id", async(req, res) =>{
+        const result = await taskCollection.findOne({_id: ObjectId(req.params.id)});
+        res.send(result)
+    })
+
+    //add new task
     app.post('/addtask', async (req, res) =>{
         const data = req.body;
         const result = await taskCollection.insertOne(data);
         res.send(result);
     });
+
+    //add comment
+
 
     //delete task
     app.delete("/delete/:id", async(req, res) =>{
@@ -55,6 +65,7 @@ const run = async() =>{
         res.send(result)
     });
 
+    //Update Complate and incomplate
     app.patch("/complatetask/:id", async(req, res) =>{
         const id = req.params.id;
         const value = req.body.isComplate;
@@ -65,6 +76,21 @@ const run = async() =>{
             }
         }
         const result = await taskCollection.updateOne(filter, updateDoc);
+        res.send(result)
+    })
+
+    //update Task
+    app.patch("/updatetask/:id", async(req, res) =>{
+        const id = req.params.id;
+        const data = req.body.data;
+        const filter = {_id: ObjectId(id)};
+        const updateDoc = {
+            $set:{
+                title: data.title,
+                description: data.description
+            }
+        }
+        const result = await taskCollection.updateOne(filter, updateDoc)
         res.send(result)
     })
 
